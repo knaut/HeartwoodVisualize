@@ -1,5 +1,5 @@
 <script>
-  let constrain = 2;
+  let constrain = 20;
   let mouse = { x: 0, y: 0 }
 
   const rings = [
@@ -48,6 +48,14 @@
         translateZ({z}px);
     "></div>
   {/each}
+
+  <svg height="0" width="0">
+    <defs>
+      <clipPath clipPathUnits="objectBoundingBox" id="sector">
+        <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.75,.066987298 z"></path>
+      </clipPath>
+    </defs>
+  </svg>
 </div>
 
 
@@ -66,6 +74,7 @@
     height: 200px;
     width: 200px;
     position: absolute;
+    clip-path: url(#sector);
   }
   .ring:nth-child(2) {
     border: 10px solid cyan;
