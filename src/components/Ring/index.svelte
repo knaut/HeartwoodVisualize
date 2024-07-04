@@ -1,4 +1,19 @@
 <script>
+
+  function calcArcPoint(angleInDegrees, centerX, centerY, radius) {
+    //polar to cartesian coordinates conversion
+    //knowing the value of your angle in degrees..
+    //get value of the angle in radians
+    console.log(-angleInDegrees * Math.PI / 180.0)
+    let angleInRadians = -angleInDegrees * Math.PI / 180.0;
+    //get the cartesian x coordinate (centerX = x coordinate of the center of the circle == 250px in our case)
+    let x = centerX + radius * Math.cos(angleInRadians);
+    //get the cartesian y coordinate (centerY = y coordinate of the center of the circle == 250px in our case)
+    let y = centerY + radius * Math.sin(angleInRadians);
+
+    return { x, y }
+  }
+
   let constrain = 20;
   let mouse = { x: 0, y: 0 }
 
@@ -34,6 +49,8 @@
     const { clientX, clientY, target } = event
 
     transform( clientX, clientY, target )
+
+    // console.log(calcArcPoint(90, 0, 0, 100))
   }
 
 </script>
@@ -52,7 +69,8 @@
   <svg height="0" width="0">
     <defs>
       <clipPath clipPathUnits="objectBoundingBox" id="sector">
-        <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.75,.066987298 z"></path>
+        <!-- <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.75, .066987298 z"></path> -->
+        <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.75, .096987298 z"></path>
       </clipPath>
     </defs>
   </svg>
