@@ -1,5 +1,46 @@
 <script>
 
+  function getCoordinatesForPercent(percent) {
+    const x = Math.cos(2 * Math.PI * percent);
+    const y = Math.sin(2 * Math.PI * percent);
+
+    return {x, y}
+  }
+
+  const { x, y } = getCoordinatesForPercent(.40);
+
+  console.log(x, y)
+
+/*
+  let sectorX = 0.75;
+  let sectorY = .096987298;
+
+  function genPath(angle) {
+    const radius = 100;
+    const radians = (angle * Math.PI) / 180;
+
+    const startX = 100;
+    const startY = 100;
+
+    const endX = startX + radius;
+    const endY = startY;
+
+    const arcX = startX + radius * Math.cos(radians);
+    const arcY = startY - radius * Math.sin(radians);
+
+    const pathData = `
+        M ${startX} ${startY} 
+        L ${endX} ${endY} 
+        A ${radius} ${radius} 0 ${angle > 180 ? 1 : 0} 1 ${arcX} ${arcY} 
+        Z
+    `;
+
+    return pathData
+  }
+
+  const path = genPath(45);
+  console.log(path)
+
   function calcArcPoint(angleInDegrees, centerX, centerY, radius) {
     //polar to cartesian coordinates conversion
     //knowing the value of your angle in degrees..
@@ -11,8 +52,11 @@
     //get the cartesian y coordinate (centerY = y coordinate of the center of the circle == 250px in our case)
     let y = centerY + radius * Math.sin(angleInRadians);
 
-    return { x, y }
+    console.log({x, y})
+
+    // return { x, y }
   }
+*/
 
   let constrain = 20;
   let mouse = { x: 0, y: 0 }
@@ -49,9 +93,9 @@
     const { clientX, clientY, target } = event
 
     transform( clientX, clientY, target )
-
-    // console.log(calcArcPoint(90, 0, 0, 100))
   }
+
+
 
 </script>
 
@@ -66,14 +110,29 @@
     "></div>
   {/each}
 
-  <svg height="0" width="0">
+  <svg viewBox="-1 -1 2 2" style="transform: rotate(-0.25turn)">
     <defs>
       <clipPath clipPathUnits="objectBoundingBox" id="sector">
         <!-- <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.75, .066987298 z"></path> -->
-        <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 0.75, .096987298 z"></path>
+
+
+        <!-- <path d=”M 1 0 A 1 1 0 0 1 0.8 0.59 L 0 0"></path> -->
+
+        <path fill="#ccc" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 {x}, {y} z"></path>
+
+
+
+        <!-- <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 {sectorX}, {sectorY} z"></path> -->
+        <!-- <path fill="none" stroke="#111" stroke-width="1" class="sector" d="M0.5,0.5 l0.5,0 A0.5,0.5 0 0,0 100, 0 z"></path> -->
       </clipPath>
     </defs>
   </svg>
+
+  <!-- <svg width="0" height="0">
+      <clipPath id="clipPath">
+          <path fill="blue" id="clipPathPath" d="{path}" />
+      </clipPath>
+  </svg> -->
 </div>
 
 
