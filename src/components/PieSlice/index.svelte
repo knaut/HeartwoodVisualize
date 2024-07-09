@@ -30,16 +30,46 @@
   Pie Slice
 
   <svg
+    id="test"
     viewBox="-1 -1 2 2"
     style="transform: rotate(-0.25turn)"
   >
     <path d="{pathData}"></path>
   </svg>
+
+  <svg
+    id="test-2"
+    viewBox="-1 -1 2 2"
+    style="transform: rotate(-0.25turn)"
+  >
+    <defs>
+      <clipPath clipPathUnits="objectBoundingBox" id="clip-path">
+        <path d="{pathData}"></path>
+      </clipPath>
+    </defs>
+  </svg>
+
+  <div id="border"></div>
 </div>
 
 
 <style>
   svg {
     border: red 1px solid;
+    width: 100px;
   }
+
+  #border {
+    background: green;
+    height: 100px;
+    width: 100px;
+
+/*    border: 5px solid cyan;*/
+/*    border-radius: 100%;*/ 
+/* these won't work, they conflict with the svg orientation */
+
+    clip-path: url(#clip-path);
+  }
+
+
 </style>
