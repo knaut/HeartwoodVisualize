@@ -10,10 +10,10 @@
    
 
     const skillData = [
-      { skill: 'CSS', duration: [2, 11] },
+      { skill: 'CSS', duration: [0, 11] },
       { skill: 'HTML', duration: [4, 12] },
       { skill: 'JS', duration: [6, 9] },
-      // { skill: 'Svelte', duration: [6, 9] },
+      { skill: 'Svelte', duration: [0, 11] },
     ]
 
     
@@ -26,8 +26,8 @@
         .attr('transform', 'translate(200,200)');
 
       const angleGen = d3.pie()
-        .startAngle( duration[0] * Math.PI / 12 )
-        .endAngle( duration[1] * Math.PI / 12 ); // need to convert months to angles properly
+        .startAngle( duration[0] * Math.PI / 6 )
+        .endAngle( duration[1] * Math.PI / 6 ); // need to convert months to angles properly
 
       const data = angleGen([1]);
 
@@ -60,7 +60,7 @@
   <svg id="demo1" width="400" height="400"></svg>
   <svg id="demo2" width="400" height="400"></svg>
   <svg id="demo3" width="400" height="400"></svg>
-  <!-- <svg id="demo4" width="400" height="400"></svg> -->
+  <svg id="demo4" width="400" height="400"></svg>
 
 </div>
 
@@ -68,5 +68,6 @@
   svg {
     border: 1px solid red;
     position: absolute;
+/*    transform: rotate(-90deg);*/
   }
 </style>
