@@ -7,21 +7,13 @@
     { skill: 'HTML', duration: [4, 12] },
     { skill: 'JS', duration: [[6, 9], [11, 12]] },
     { skill: 'Svelte', duration: [0, 11] },
+    { skill: 'Rust', duration: [[2, 3], [5,6]] },
   ]
 
   console.log('Multi-level Pie Chart', d3)
 
   onMount(() => {
    
-
-    // const skillData = [
-    //   { skill: 'CSS', duration: [0, 11] },
-    //   { skill: 'HTML', duration: [4, 12] },
-    //   { skill: 'JS', duration: [[6, 9], [11, 12]] },
-    //   { skill: 'Svelte', duration: [0, 11] },
-    // ]
-
-    
     for (let i = 0; skillData.length > i; i++) {
 
       const { skill, duration } = skillData[i]
@@ -41,8 +33,8 @@
           const data = angleGen([1]);
 
           const arcGen = d3.arc()
-            .innerRadius((i + 1 / (i+1)) * 30)
-            .outerRadius((i + 1 / (i+2)) * 40);
+            .innerRadius((i + 1 / (i + 1.1)) * 25)
+            .outerRadius((i + 1 / (i + 1)) * 30);
 
           d3.select(`#demo${i + 1}-${c + 1} g`)
             .selectAll('path')
@@ -69,10 +61,8 @@
         const data = angleGen([1]);
         
         const arcGen = d3.arc()
-          // .innerRadius(30)
-          // .outerRadius(90);
-          .innerRadius((i + 1 / (i+1)) * 30)
-          .outerRadius((i + 1 / (i+2)) * 40);
+          .innerRadius((i + 1 / (i + 1.1)) * 25)
+          .outerRadius((i + 1 / (i + 1)) * 30);
         
         d3.select(`#demo${i + 1} g`)
           .selectAll('path')
