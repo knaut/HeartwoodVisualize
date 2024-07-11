@@ -2,6 +2,25 @@
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
 
+  let constrain = 50;
+  let perspX = 0;
+  let perspY = 0;
+
+  function transform(x, y, el) {
+    let box = el.getBoundingClientRect();
+    let calcX = -(y - box.y - (box.height / 2)) / constrain;
+    let calcY = (x - box.x - (box.width / 2)) / constrain;
+
+    perspX = calcX
+    perspY = calcY
+  }
+
+  function handleMousemove(event) {
+    const { clientX, clientY, target } = event
+
+    transform( clientX, clientY, target )
+  }
+
   const skillData = [
     { skill: 'CSS', duration: [0, 11] },
     { skill: 'HTML', duration: [4, 12] },
@@ -84,28 +103,51 @@
 </script>
 
 
-<div>
-  
-  {#each skillData as skill, i}
-    
-    {#if Array.isArray(skill.duration[0])}
+<div class="container"  style="
+  border: 1px solid blue;
+">
+  <div class="svg-wrapper" on:mousemove={handleMousemove} style="
+  transform:
+    perspective(100px)
+    rotateX({perspX}deg)
+    rotateY({perspY}deg)
+    translateZ(0px);
+  ">
+    {#each skillData as skill, i}
+      
+      {#if Array.isArray(skill.duration[0])}
 
-      {#each skill.duration as duration, c}
-        <svg id="demo{i + 1}-{c + 1}" width="400" height="400"></svg>        
-      {/each}
-    
-    {:else}
-      <svg id="demo{i + 1}" width="400" height="400"></svg>  
-    {/if}
-    
-  {/each}
-
+        {#each skill.duration as duration, c}
+          <svg id="demo{i + 1}-{c + 1}" width="400" height="400"></svg>        
+        {/each}
+      
+      {:else}
+        <svg id="demo{i + 1}" width="400" height="400"></svg>  
+      {/if}
+      
+    {/each}
+  </div>
 </div>
 
 <style>
   svg {
     border: 1px solid red;
     position: absolute;
-/*    transform: rotate(-90deg);*/
+  }
+
+  .svg-wrapper {
+    position: relative;
+    height: 400px;
+    width: 400px;
+  }
+
+  .container {
+    width: 400px;
+    height: 400px;
+    /*height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;*/
   }
 </style>
