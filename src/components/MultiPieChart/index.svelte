@@ -27,9 +27,8 @@
     { skill: 'JS', duration: [[6, 9], [11, 12]], fill: '#45C4B0' },
     { skill: 'Svelte', duration: [0, 11], fill: '#9AEBA3' },
     { skill: 'Rust', duration: [[2, 3], [5,6]], fill: '#DAFDBA' },
+    { skill: 'TypeScript', duration: [[9, 10], [11,11.5]], fill: '#DAFDBA' },
   ]
-
-  console.log('Multi-level Pie Chart', d3)
 
   onMount(() => {
    
@@ -43,7 +42,7 @@
 
           d3.select(`#demo${i + 1}-${c + 1}`)
             .append('g')
-            .attr('transform', 'translate(200,200)');
+            .attr('transform', 'translate(0, 0)');
           
           const angleGen = d3.pie()
             .startAngle( duration[c][0] * Math.PI / 6 )
@@ -64,24 +63,6 @@
             .attr('fill', fill)
             .attr('stroke', 'gray')
             .attr('stroke-width', 1)
-
-          const tooltip = d3.select(`#demo${i + 1}-${c + 1}`)
-            .append('div')
-            .style('position', 'absolute')
-            // .style('visibility', 'hidden')
-            .text(skill)
-
-          d3.select(`#demo${i + 1}`)
-            .on('mouseover', function() {
-              return tooltip.style('visibility', 'visible')
-            })
-            .on('mousemove', function(event) {
-              console.log(event)
-              return tooltip.style('top', (event.pageY - 100) + 'px').style('left', (event.pageX - 100) + 'px')
-            })
-            .on('mouseout', function() {
-              return tooltip.style('visibility', 'hidden')
-            })
           
         }
 
@@ -89,7 +70,7 @@
 
         d3.select(`#demo${i + 1}`)
           .append('g')
-          .attr('transform', 'translate(200,200)');
+          .attr('transform', 'translate(0, 0)');
 
         const angleGen = d3.pie()
           .startAngle( duration[0] * Math.PI / 6 )
@@ -111,25 +92,6 @@
           .attr('stroke', 'gray')
           .attr('stroke-width', 1);
 
-        const tooltip = d3.select(`#demo${i + 1}`)
-          .append('div')
-          .style('position', 'absolute')
-          // .style('visibility', 'hidden')
-          .text(skill)
-
-          console.log(tooltip)
-
-        d3.select(`#demo${i + 1}`)
-          .on('mouseover', function() {
-            return tooltip.style('visibility', 'visible')
-          })
-          .on('mousemove', function(event) {
-            return tooltip.style('top', (event.pageY - 100) + 'px').style('left', (event.pageX - 100) + 'px')
-          })
-          .on('mouseout', function() {
-            return tooltip.style('visibility', 'hidden')
-          })
-
       }
 
     }
@@ -140,33 +102,30 @@
 </script>
 
 
-<div class="container"  style="
-  border: 1px solid blue;
-">
-  <div class="svg-wrapper" on:mousemove={handleMousemove} style="
-  transform:
-    perspective(100px)
-    rotateX({perspX}deg)
-    rotateY({perspY}deg)
-    translateZ(0px);
-  ">
+
+  <div class="svg-wrapper">
     {#each skillData as skill, i}
       
       {#if Array.isArray(skill.duration[0])}
 
         {#each skill.duration as duration, c}
-          <svg id="demo{i + 1}-{c + 1}" width="400" height="400"></svg>        
+          <!-- might have to scale viewboxes based on number of data -->
+          <!-- viewbox args, center is half of width/height -->
+          <svg id="demo{i + 1}-{c + 1}" viewBox="-175 -175 350 350"></svg>        
         {/each}
       
       {:else}
-        <svg id="demo{i + 1}" width="400" height="400"></svg>  
+        <svg id="demo{i + 1}" viewBox="-175 -175 350 350"></svg>  
       {/if}
       
     {/each}
   </div>
-</div>
 
 <style>
+  :global(body) {
+    padding: 0 !important;
+  }
+
   svg {
     border: 1px solid red;
     position: absolute;
@@ -174,17 +133,9 @@
 
   .svg-wrapper {
     position: relative;
-    height: 400px;
-    width: 400px;
-  }
-
-  .container {
-    width: 400px;
-    height: 400px;
-    /*height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;*/
+    border: 1px solid cyan;
+/*    width: 100%;*/
+    width: 100vh;
+    height: 100vh;
   }
 </style>
