@@ -22,11 +22,11 @@
   }
 
   const skillData = [
-    { skill: 'CSS', duration: [0, 11] },
-    { skill: 'HTML', duration: [4, 12] },
-    { skill: 'JS', duration: [[6, 9], [11, 12]] },
-    { skill: 'Svelte', duration: [0, 11] },
-    { skill: 'Rust', duration: [[2, 3], [5,6]] },
+    { skill: 'CSS', duration: [0, 11], fill: '#012030' },
+    { skill: 'HTML', duration: [4, 12], fill: '#13678A' },
+    { skill: 'JS', duration: [[6, 9], [11, 12]], fill: '#45C4B0' },
+    { skill: 'Svelte', duration: [0, 11], fill: '#9AEBA3' },
+    { skill: 'Rust', duration: [[2, 3], [5,6]], fill: '#DAFDBA' },
   ]
 
   console.log('Multi-level Pie Chart', d3)
@@ -35,7 +35,7 @@
    
     for (let i = 0; skillData.length > i; i++) {
 
-      const { skill, duration } = skillData[i]
+      const { skill, duration, fill } = skillData[i]
 
       if (Array.isArray(duration[0])) {
 
@@ -61,9 +61,27 @@
             .enter()
             .append('path')
             .attr('d', arcGen)
-            .attr('fill', 'pink')
+            .attr('fill', fill)
             .attr('stroke', 'gray')
-            .attr('stroke-width', 1);
+            .attr('stroke-width', 1)
+
+          const tooltip = d3.select(`#demo${i + 1}-${c + 1}`)
+            .append('div')
+            .style('position', 'absolute')
+            // .style('visibility', 'hidden')
+            .text(skill)
+
+          d3.select(`#demo${i + 1}`)
+            .on('mouseover', function() {
+              return tooltip.style('visibility', 'visible')
+            })
+            .on('mousemove', function(event) {
+              console.log(event)
+              return tooltip.style('top', (event.pageY - 100) + 'px').style('left', (event.pageX - 100) + 'px')
+            })
+            .on('mouseout', function() {
+              return tooltip.style('visibility', 'hidden')
+            })
           
         }
 
@@ -89,9 +107,28 @@
           .enter()
           .append('path')
           .attr('d', arcGen)
-          .attr('fill', 'pink')
+          .attr('fill', fill)
           .attr('stroke', 'gray')
           .attr('stroke-width', 1);
+
+        const tooltip = d3.select(`#demo${i + 1}`)
+          .append('div')
+          .style('position', 'absolute')
+          // .style('visibility', 'hidden')
+          .text(skill)
+
+          console.log(tooltip)
+
+        d3.select(`#demo${i + 1}`)
+          .on('mouseover', function() {
+            return tooltip.style('visibility', 'visible')
+          })
+          .on('mousemove', function(event) {
+            return tooltip.style('top', (event.pageY - 100) + 'px').style('left', (event.pageX - 100) + 'px')
+          })
+          .on('mouseout', function() {
+            return tooltip.style('visibility', 'hidden')
+          })
 
       }
 
