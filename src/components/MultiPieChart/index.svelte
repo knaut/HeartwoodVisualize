@@ -2,14 +2,17 @@
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
 
-  let constrain = 50;
+  let constrain = 200;
   let perspX = 0;
   let perspY = 0;
 
   function transform(x, y, el) {
     let box = el.getBoundingClientRect();
+    console.log(box.height, box.width)
     let calcX = -(y - box.y - (box.height / 2)) / constrain;
     let calcY = (x - box.x - (box.width / 2)) / constrain;
+
+
 
     perspX = calcX
     perspY = calcY
@@ -17,6 +20,8 @@
 
   function handleMousemove(event) {
     const { clientX, clientY, target } = event
+
+    // console.log(clientX, clientY)
 
     transform( clientX, clientY, target )
   }
@@ -61,8 +66,8 @@
             .append('path')
             .attr('d', arcGen)
             .attr('fill', fill)
-            .attr('stroke', 'gray')
-            .attr('stroke-width', 1)
+            // .attr('stroke', 'gray')
+            // .attr('stroke-width', 1)
           
         }
 
@@ -89,8 +94,8 @@
           .append('path')
           .attr('d', arcGen)
           .attr('fill', fill)
-          .attr('stroke', 'gray')
-          .attr('stroke-width', 1);
+          // .attr('stroke', 'gray')
+          // .attr('stroke-width', 1);
 
       }
 
@@ -101,9 +106,15 @@
 
 </script>
 
-
-
-  <div class="svg-wrapper">
+<!-- on:mousemove={handleMousemove} -->
+<div class="container" on:mousemove={handleMousemove}>
+  <div class="svg-wrapper" style="
+  transform:
+    perspective(200px)
+    rotateX({perspX}deg)
+    rotateY({perspY}deg)
+    translateZ(0px);
+  ">
     {#each skillData as skill, i}
       
       {#if Array.isArray(skill.duration[0])}
@@ -120,7 +131,7 @@
       
     {/each}
   </div>
-
+</div>
 <style>
   :global(body) {
     padding: 0 !important;
@@ -129,13 +140,23 @@
   svg {
     border: 1px solid red;
     position: absolute;
+    z-index: 1;
   }
 
   .svg-wrapper {
     position: relative;
     border: 1px solid cyan;
-/*    width: 100%;*/
-    width: 100vh;
+    width: 100vh; /* set to vw to expand to full-width below the fold */
     height: 100vh;
+  }
+
+  .container {
+    border: 8px solid purple;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
