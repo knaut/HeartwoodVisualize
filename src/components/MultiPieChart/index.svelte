@@ -2,13 +2,13 @@
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
 
-  let constrain = 200;
+  let constrain = 50;
   let perspX = 0;
   let perspY = 0;
 
   function transform(x, y, el) {
     let box = el.getBoundingClientRect();
-    console.log(box.height, box.width)
+    // console.log(box.height, box.width, el)
     let calcX = -(y - box.y - (box.height / 2)) / constrain;
     let calcY = (x - box.x - (box.width / 2)) / constrain;
 
@@ -22,6 +22,9 @@
     const { clientX, clientY, target } = event
 
     // console.log(clientX, clientY)
+    // const el = document.querySelector('#demo1')
+    // const vals = el.getBBox();
+    // console.log(vals.height, vals.width)
 
     transform( clientX, clientY, target )
   }
@@ -107,7 +110,8 @@
 </script>
 
 <!-- on:mousemove={handleMousemove} -->
-<div class="container" on:mousemove={handleMousemove}>
+<div class="test" on:mousemove={handleMousemove}></div>
+<div class="container" >
   <div class="svg-wrapper" style="
   transform:
     perspective(200px)
@@ -132,6 +136,7 @@
     {/each}
   </div>
 </div>
+
 <style>
   :global(body) {
     padding: 0 !important;
@@ -140,6 +145,11 @@
   svg {
     border: 1px solid red;
     position: absolute;
+    z-index: 1;
+  }
+
+  svg path {
+    position: relative;
     z-index: 1;
   }
 
@@ -158,5 +168,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .test {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
   }
 </style>
