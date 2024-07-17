@@ -22,38 +22,47 @@
     transform( clientX, clientY, target )
   }
 
+  const colors = {
+    CSS: '#012030',
+    HTML: '#13678A',
+    JS: '#45C4B0',
+    Svelte: '#9AEBA3',
+    Rust: '#DAFDBA',
+    TypeScript: '#DAFDBA'
+  }
+
   const skills = {
     '2025': [
-      { skill: 'CSS', duration: [0, 11], fill: '#012030' },
-      { skill: 'HTML', duration: [4, 12], fill: '#13678A' },
-      { skill: 'JS', duration: [[6, 9], [11, 12]], fill: '#45C4B0' },
-      { skill: 'Svelte', duration: [0, 11], fill: '#9AEBA3' },
-      { skill: 'Rust', duration: [[2, 3], [5,6]], fill: '#DAFDBA' },
-      { skill: 'TypeScript', duration: [[9, 10], [11,11.5]], fill: '#DAFDBA' },
+      { skill: 'CSS', duration: [0, 11] },
+      { skill: 'HTML', duration: [4, 12] },
+      { skill: 'JS', duration: [[6, 9], [11, 12]] },
+      { skill: 'Svelte', duration: [0, 11] },
+      { skill: 'Rust', duration: [[2, 3], [5,6]] },
+      { skill: 'TypeScript', duration: [[9, 10], [11,11.5]] },
     ],
     '2024': [
-      { skill: 'CSS', duration: [0, 12], fill: '#012030' },
-      { skill: 'HTML', duration: [0, 12], fill: '#13678A' },
-      { skill: 'JS', duration: [[0, 12], [11, 12]], fill: '#45C4B0' },
-      { skill: 'Svelte', duration: [[2, 4], [8, 9]], fill: '#9AEBA3' },
-      { skill: 'Rust', duration: [1, 2], fill: '#DAFDBA' },
-      { skill: 'TypeScript', duration: [3, 7], fill: '#DAFDBA' },
+      { skill: 'CSS', duration: [0, 12] },
+      { skill: 'HTML', duration: [0, 12] },
+      { skill: 'JS', duration: [[0, 12], [11, 12]] },
+      { skill: 'Svelte', duration: [[2, 4], [8, 9]] },
+      { skill: 'Rust', duration: [1, 2] },
+      { skill: 'TypeScript', duration: [3, 7] },
     ],
     '2023': [
-      { skill: 'CSS', duration: [7, 12], fill: '#012030' },
-      { skill: 'HTML', duration: [4, 8], fill: '#13678A' },
-      { skill: 'JS', duration: [11, 12], fill: '#45C4B0' },
-      { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]], fill: '#9AEBA3' },
-      { skill: 'Rust', duration: [6, 7], fill: '#DAFDBA' },
-      { skill: 'TypeScript', duration: [4, 9], fill: '#DAFDBA' },
+      { skill: 'CSS', duration: [7, 12] },
+      { skill: 'HTML', duration: [4, 8] },
+      { skill: 'JS', duration: [11, 12] },
+      { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]] },
+      { skill: 'Rust', duration: [6, 7] },
+      { skill: 'TypeScript', duration: [4, 9] },
     ],
     '2022': [
-      { skill: 'CSS', duration: [1, 12], fill: '#012030' },
-      { skill: 'HTML', duration: [1, 2], fill: '#13678A' },
-      { skill: 'JS', duration: [[11, 12], [2, 3]], fill: '#45C4B0' },
-      { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]], fill: '#9AEBA3' },
-      { skill: 'Rust', duration: [6, 7], fill: '#DAFDBA' },
-      { skill: 'TypeScript', duration: [4, 9], fill: '#DAFDBA' },
+      { skill: 'CSS', duration: [1, 12] },
+      { skill: 'HTML', duration: [1, 2] },
+      { skill: 'JS', duration: [[11, 12], [2, 3]] },
+      { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]] },
+      { skill: 'Rust', duration: [6, 7] },
+      { skill: 'TypeScript', duration: [4, 9] },
     ]
   }
 
@@ -78,10 +87,6 @@
   }
 
   let skillList = gatherSkillList(skills)
-
-  function onSkillHover(e) {
-    console.log('hover', e.target)
-  }
 
   onMount(() => {
 
@@ -117,7 +122,8 @@
               .enter()
               .append('path')
               .attr('d', arcGen)
-              .attr('fill', fill)
+              .attr('fill', colors[skill])
+              .attr('class', skill)
             
           }
 
@@ -143,7 +149,8 @@
             .enter()
             .append('path')
             .attr('d', arcGen)
-            .attr('fill', fill)
+            .attr('fill', colors[skill])
+            .attr('class', skill)
 
         }
 
@@ -158,7 +165,20 @@
 
 <ul id="skill-list">
   {#each skillList as skill, i}
-    <li on:mouseover={e => console.log(e.target, skill)}>{skill}</li>
+    <li 
+      on:mouseenter={e => {
+        // console.log(e.target, skill)
+        d3.selectAll(`path.${skill}`)
+          .attr('fill', 'orange')
+      }}
+      on:mouseleave={e => {
+        // console.log(e.target, skill)
+        d3.selectAll(`path.${skill}`)
+          .attr('fill', colors[skill])
+      }}
+    >
+      {skill}
+    </li>
   {/each}
 </ul>
 
@@ -254,5 +274,14 @@
     width: 100px;
     margin-left: -80px;
     text-align: right;
+    cursor: pointer;
+  }
+
+  #skill-list li:hover {
+    color: orange;
+  }
+
+  :global(path) {
+    transition: 0.2s fill ease-in-out;
   }
 </style>
