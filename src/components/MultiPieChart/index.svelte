@@ -2,17 +2,15 @@
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
 
-  let constrain = 50;
+  let constrain = 40;
   let perspX = 0;
   let perspY = 0;
 
   function transform(x, y, el) {
     let box = el.getBoundingClientRect();
-    // console.log(box.height, box.width, el)
+
     let calcX = -(y - box.y - (box.height / 2)) / constrain;
     let calcY = (x - box.x - (box.width / 2)) / constrain;
-
-
 
     perspX = calcX
     perspY = calcY
@@ -21,14 +19,10 @@
   function handleMousemove(event) {
     const { clientX, clientY, target } = event
 
-    // console.log(clientX, clientY)
-    // const el = document.querySelector('#demo1')
-    // const vals = el.getBBox();
-    // console.log(vals.height, vals.width)
-
     transform( clientX, clientY, target )
   }
 
+  /*
   const skillData = [
     { skill: 'CSS', duration: [0, 11], fill: '#012030' },
     { skill: 'HTML', duration: [4, 12], fill: '#13678A' },
@@ -37,68 +31,96 @@
     { skill: 'Rust', duration: [[2, 3], [5,6]], fill: '#DAFDBA' },
     { skill: 'TypeScript', duration: [[9, 10], [11,11.5]], fill: '#DAFDBA' },
   ]
+  */
+
+  $: skillCount = 0;
+
+  function incrSkillCount() {
+    skillCount = skillCount + 1
+  }
+
+  const skills = {
+    '2025': [
+      { skill: 'CSS', duration: [0, 11], fill: '#012030' },
+      { skill: 'HTML', duration: [4, 12], fill: '#13678A' },
+      { skill: 'JS', duration: [[6, 9], [11, 12]], fill: '#45C4B0' },
+      { skill: 'Svelte', duration: [0, 11], fill: '#9AEBA3' },
+      { skill: 'Rust', duration: [[2, 3], [5,6]], fill: '#DAFDBA' },
+      { skill: 'TypeScript', duration: [[9, 10], [11,11.5]], fill: '#DAFDBA' },
+    ],
+    '2024': [
+      { skill: 'CSS', duration: [0, 12], fill: '#012030' },
+      { skill: 'HTML', duration: [0, 12], fill: '#13678A' },
+      { skill: 'JS', duration: [[0, 12], [11, 12]], fill: '#45C4B0' },
+      { skill: 'Svelte', duration: [[2, 4], [8, 9]], fill: '#9AEBA3' },
+      { skill: 'Rust', duration: [1, 2], fill: '#DAFDBA' },
+      { skill: 'TypeScript', duration: [3, 7], fill: '#DAFDBA' },
+    ]
+  }
 
   onMount(() => {
-   
-    for (let i = 0; skillData.length > i; i++) {
 
-      const { skill, duration, fill } = skillData[i]
+    for (let yearKey in skills) {
 
-      if (Array.isArray(duration[0])) {
+      const skillData = skills[yearKey]
 
-        for (let c = 0; duration.length > c; c++) {
+      for (let i = 0; skillData.length > i; i++) {
 
-          d3.select(`#demo${i + 1}-${c + 1}`)
+        const { skill, duration, fill } = skillData[i]
+
+        if (Array.isArray(duration[0])) {
+
+          for (let c = 0; duration.length > c; c++) {
+
+            d3.select(`#year${yearKey}-${i + 1}-${c + 1}`)
+              .append('g')
+              .attr('transform', 'translate(0, 0)');
+            
+            const angleGen = d3.pie()
+              .startAngle( duration[c][0] * Math.PI / 6 )
+              .endAngle( duration[c][1] * Math.PI / 6 ); // need to convert months to angles 
+
+            const data = angleGen([1]);
+
+            const arcGen = d3.arc()
+              .innerRadius((i + 1 / (i + 1.1)) * 25)
+              .outerRadius((i + 1 / (i + 1)) * 30);
+
+            d3.select(`#year${yearKey}-${i + 1}-${c + 1} g`)
+              .selectAll('path')
+              .data(data)
+              .enter()
+              .append('path')
+              .attr('d', arcGen)
+              .attr('fill', fill)
+            
+          }
+
+        } else {
+
+          d3.select(`#year${yearKey}-${i + 1}`)
             .append('g')
             .attr('transform', 'translate(0, 0)');
-          
+
           const angleGen = d3.pie()
-            .startAngle( duration[c][0] * Math.PI / 6 )
-            .endAngle( duration[c][1] * Math.PI / 6 ); // need to convert months to angles properly
-
+            .startAngle( duration[0] * Math.PI / 6 )
+            .endAngle( duration[1] * Math.PI / 6 ); // need to convert months to angles 
+          
           const data = angleGen([1]);
-
+          
           const arcGen = d3.arc()
             .innerRadius((i + 1 / (i + 1.1)) * 25)
             .outerRadius((i + 1 / (i + 1)) * 30);
-
-          d3.select(`#demo${i + 1}-${c + 1} g`)
+          
+          d3.select(`#year${yearKey}-${i + 1} g`)
             .selectAll('path')
             .data(data)
             .enter()
             .append('path')
             .attr('d', arcGen)
             .attr('fill', fill)
-            // .attr('stroke', 'gray')
-            // .attr('stroke-width', 1)
-          
+
         }
-
-      } else {
-
-        d3.select(`#demo${i + 1}`)
-          .append('g')
-          .attr('transform', 'translate(0, 0)');
-
-        const angleGen = d3.pie()
-          .startAngle( duration[0] * Math.PI / 6 )
-          .endAngle( duration[1] * Math.PI / 6 ); // need to convert months to angles properly
-        
-        const data = angleGen([1]);
-        
-        const arcGen = d3.arc()
-          .innerRadius((i + 1 / (i + 1.1)) * 25)
-          .outerRadius((i + 1 / (i + 1)) * 30);
-        
-        d3.select(`#demo${i + 1} g`)
-          .selectAll('path')
-          .data(data)
-          .enter()
-          .append('path')
-          .attr('d', arcGen)
-          .attr('fill', fill)
-          // .attr('stroke', 'gray')
-          // .attr('stroke-width', 1);
 
       }
 
@@ -109,32 +131,46 @@
 
 </script>
 
-<!-- on:mousemove={handleMousemove} -->
-<div class="test" on:mousemove={handleMousemove}></div>
-<div class="container" >
-  <div class="svg-wrapper" style="
-  transform:
-    perspective(200px)
-    rotateX({perspX}deg)
-    rotateY({perspY}deg)
-    translateZ(0px);
-  ">
-    {#each skillData as skill, i}
-      
-      {#if Array.isArray(skill.duration[0])}
+<div id="viz-viewport" on:mousemove={handleMousemove}></div>
 
-        {#each skill.duration as duration, c}
-          <!-- might have to scale viewboxes based on number of data -->
-          <!-- viewbox args, center is half of width/height -->
-          <svg id="demo{i + 1}-{c + 1}" viewBox="-175 -175 350 350"></svg>        
-        {/each}
-      
-      {:else}
-        <svg id="demo{i + 1}" viewBox="-175 -175 350 350"></svg>  
-      {/if}
-      
-    {/each}
-  </div>
+<div class="container">
+
+
+  {#each Object.entries(skills) as [yearKey, skillData], s}
+
+    <div class="svg-wrapper" style="
+      opacity: {1 - (s * .50)};
+      z-index: {skillData.length - s};
+      transform:
+        perspective(200px)
+        rotateX({perspX}deg)
+        rotateY({perspY}deg)
+        translateZ(-{s * 100}px)
+        scale({1 + (s * .2)});
+
+    ">
+      {#each skillData as skill, i}
+        
+        <!-- {console.log(skill)} -->
+
+        {#if Array.isArray(skill.duration[0])}
+
+          {#each skill.duration as duration, c}
+            <!-- might have to scale viewboxes based on number of data -->
+            <!-- viewbox args, center is half of width/height -->
+            <svg id="year{yearKey}-{i + 1}-{c + 1}" viewBox="-175 -175 350 350"></svg>        
+          {/each}
+        
+        {:else}
+          <svg id="year{yearKey}-{i + 1}" viewBox="-175 -175 350 350"></svg>  
+        {/if}
+        
+      {/each}
+    </div>
+
+  {/each}
+
+  
 </div>
 
 <style>
@@ -154,7 +190,7 @@
   }
 
   .svg-wrapper {
-    position: relative;
+    position: absolute;
     border: 1px solid cyan;
     width: 100vh; /* set to vw to expand to full-width below the fold */
     height: 100vh;
@@ -170,7 +206,7 @@
     justify-content: center;
   }
 
-  .test {
+  #viz-viewport {
     position: absolute;
     top: 0;
     left: 0;
