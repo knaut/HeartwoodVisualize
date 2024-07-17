@@ -47,7 +47,7 @@
       { skill: 'Rust', duration: [6, 7], fill: '#DAFDBA' },
       { skill: 'TypeScript', duration: [4, 9], fill: '#DAFDBA' },
     ],
-    '2023': [
+    '2022': [
       { skill: 'CSS', duration: [1, 12], fill: '#012030' },
       { skill: 'HTML', duration: [1, 2], fill: '#13678A' },
       { skill: 'JS', duration: [[11, 12], [2, 3]], fill: '#45C4B0' },
@@ -55,6 +55,32 @@
       { skill: 'Rust', duration: [6, 7], fill: '#DAFDBA' },
       { skill: 'TypeScript', duration: [4, 9], fill: '#DAFDBA' },
     ]
+  }
+
+
+  function gatherSkillList(skillsObj) {
+    let skillList = []
+
+    for (let year in skillsObj) {
+      const val = skillsObj[year]
+
+      for (let i = 0; val.length > i; i++) {
+        const skill = val[i].skill
+
+        if (skillList.indexOf(skill) === -1) {
+          skillList.push(skill)
+        }
+
+      }
+    }
+
+    return skillList
+  }
+
+  let skillList = gatherSkillList(skills)
+
+  function onSkillHover(e) {
+    console.log('hover', e.target)
   }
 
   onMount(() => {
@@ -128,14 +154,17 @@
 
   })
 
-  // $: console.log({perspX, perspY})
-
 </script>
+
+<ul id="skill-list">
+  {#each skillList as skill, i}
+    <li on:mouseover={e => console.log(e.target, skill)}>{skill}</li>
+  {/each}
+</ul>
 
 <div id="viz-viewport" on:mousemove={handleMousemove}></div>
 
 <div class="container">
-
 
   {#each Object.entries(skills).reverse() as [yearKey, skillData], s}
 
@@ -173,12 +202,8 @@
 </div>
 
 <style>
-  :global(body) {
-    padding: 0 !important;
-  }
 
   svg {
-    border: 1px solid red;
     position: absolute;
     z-index: 1;
   }
@@ -190,14 +215,11 @@
 
   .svg-wrapper {
     position: absolute;
-    border: 1px solid cyan;
     width: 100vh; /* set to vw to expand to full-width below the fold */
     height: 100vh;
   }
 
   .container {
-    border: 8px solid purple;
-    box-sizing: border-box;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -212,5 +234,25 @@
     right: 0;
     bottom: 0;
     z-index: 50;
+  }
+
+  #skill-list {
+    position: absolute;
+    z-index: 51;
+    left: 70px;
+    top: 50px;
+    list-style: none;
+    padding: 0;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+
+  #skill-list li {
+    display: block;
+    transform: rotate(-90deg);
+    width: 100px;
+    margin-left: -80px;
+    text-align: right;
   }
 </style>
