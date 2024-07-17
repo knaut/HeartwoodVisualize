@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
 
-  let constrain = 40;
+  let constrain = 45;
   let perspX = 0;
   let perspY = 0;
 
@@ -22,23 +22,6 @@
     transform( clientX, clientY, target )
   }
 
-  /*
-  const skillData = [
-    { skill: 'CSS', duration: [0, 11], fill: '#012030' },
-    { skill: 'HTML', duration: [4, 12], fill: '#13678A' },
-    { skill: 'JS', duration: [[6, 9], [11, 12]], fill: '#45C4B0' },
-    { skill: 'Svelte', duration: [0, 11], fill: '#9AEBA3' },
-    { skill: 'Rust', duration: [[2, 3], [5,6]], fill: '#DAFDBA' },
-    { skill: 'TypeScript', duration: [[9, 10], [11,11.5]], fill: '#DAFDBA' },
-  ]
-  */
-
-  $: skillCount = 0;
-
-  function incrSkillCount() {
-    skillCount = skillCount + 1
-  }
-
   const skills = {
     '2025': [
       { skill: 'CSS', duration: [0, 11], fill: '#012030' },
@@ -55,6 +38,22 @@
       { skill: 'Svelte', duration: [[2, 4], [8, 9]], fill: '#9AEBA3' },
       { skill: 'Rust', duration: [1, 2], fill: '#DAFDBA' },
       { skill: 'TypeScript', duration: [3, 7], fill: '#DAFDBA' },
+    ],
+    '2023': [
+      { skill: 'CSS', duration: [7, 12], fill: '#012030' },
+      { skill: 'HTML', duration: [4, 8], fill: '#13678A' },
+      { skill: 'JS', duration: [11, 12], fill: '#45C4B0' },
+      { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]], fill: '#9AEBA3' },
+      { skill: 'Rust', duration: [6, 7], fill: '#DAFDBA' },
+      { skill: 'TypeScript', duration: [4, 9], fill: '#DAFDBA' },
+    ],
+    '2023': [
+      { skill: 'CSS', duration: [1, 12], fill: '#012030' },
+      { skill: 'HTML', duration: [1, 2], fill: '#13678A' },
+      { skill: 'JS', duration: [[11, 12], [2, 3]], fill: '#45C4B0' },
+      { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]], fill: '#9AEBA3' },
+      { skill: 'Rust', duration: [6, 7], fill: '#DAFDBA' },
+      { skill: 'TypeScript', duration: [4, 9], fill: '#DAFDBA' },
     ]
   }
 
@@ -129,6 +128,8 @@
 
   })
 
+  // $: console.log({perspX, perspY})
+
 </script>
 
 <div id="viz-viewport" on:mousemove={handleMousemove}></div>
@@ -136,23 +137,21 @@
 <div class="container">
 
 
-  {#each Object.entries(skills) as [yearKey, skillData], s}
+  {#each Object.entries(skills).reverse() as [yearKey, skillData], s}
 
     <div class="svg-wrapper" style="
-      opacity: {1 - (s * .50)};
+      opacity: {1 - (s * .30)};
       z-index: {skillData.length - s};
       transform:
         perspective(200px)
         rotateX({perspX}deg)
         rotateY({perspY}deg)
         translateZ(-{s * 100}px)
-        scale({1 + (s * .2)});
+        scale({1 + (s * (skillData.length * (.001 * (Math.abs(perspX) + Math.abs(perspY)) ) ))});
 
     ">
       {#each skillData as skill, i}
         
-        <!-- {console.log(skill)} -->
-
         {#if Array.isArray(skill.duration[0])}
 
           {#each skill.duration as duration, c}
