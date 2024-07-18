@@ -26,9 +26,11 @@
     CSS: '#012030',
     HTML: '#13678A',
     JS: '#45C4B0',
+    React: '#E8EB85',
     Svelte: '#9AEBA3',
     Rust: '#DAFDBA',
-    TypeScript: '#DAFDBA'
+    TypeScript: '#DAFDBA',
+
   }
 
   const skills = {
@@ -36,25 +38,31 @@
       { skill: 'CSS', duration: [0, 11] },
       { skill: 'HTML', duration: [4, 12] },
       { skill: 'JS', duration: [[6, 9], [11, 12]] },
+      { skill: 'React', duration: [[1, 5], [7,11]] },
       { skill: 'Svelte', duration: [0, 11] },
       { skill: 'Rust', duration: [[2, 3], [5,6]] },
       { skill: 'TypeScript', duration: [[9, 10], [11,11.5]] },
+      
     ],
     '2024': [
       { skill: 'CSS', duration: [0, 12] },
       { skill: 'HTML', duration: [0, 12] },
       { skill: 'JS', duration: [[0, 12], [11, 12]] },
+      { skill: 'React', duration: [11, 12] },
       { skill: 'Svelte', duration: [[2, 4], [8, 9]] },
       { skill: 'Rust', duration: [1, 2] },
       { skill: 'TypeScript', duration: [3, 7] },
+      
     ],
     '2023': [
       { skill: 'CSS', duration: [7, 12] },
       { skill: 'HTML', duration: [4, 8] },
       { skill: 'JS', duration: [11, 12] },
+      { skill: 'React', duration: [1, 2] },
       { skill: 'Svelte', duration: [[2, 4], [8, 9], [11, 12]] },
       { skill: 'Rust', duration: [6, 7] },
       { skill: 'TypeScript', duration: [4, 9] },
+      
     ],
     '2022': [
       { skill: 'CSS', duration: [1, 12] },
@@ -206,11 +214,13 @@
           {#each skill.duration as duration, c}
             <!-- might have to scale viewboxes based on number of data -->
             <!-- viewbox args, center is half of width/height -->
-            <svg id="year{yearKey}-{i + 1}-{c + 1}" viewBox="-175 -175 350 350"></svg>        
+            <!-- viewBox="-175 -175 350 350" -->
+            <!-- every added skill needs to grow the viewBox by ~25-28px -->
+            <svg id="year{yearKey}-{i + 1}-{c + 1}" viewBox="-200 -200 400 400"></svg>        
           {/each}
         
         {:else}
-          <svg id="year{yearKey}-{i + 1}" viewBox="-175 -175 350 350"></svg>  
+          <svg id="year{yearKey}-{i + 1}" viewBox="-200 -200 400 400"></svg>  
         {/if}
         
       {/each}
@@ -271,14 +281,32 @@
   #skill-list li {
     display: block;
     transform: rotate(-90deg);
-    width: 100px;
+    width: 120px;
+    padding: 10px 0;
     margin-left: -80px;
     text-align: right;
     cursor: pointer;
+    position: relative;
+    color: #999;
+    font-size: 16px;
+  }
+
+  #skill-list li:before {
+      content: '>';
+      position: relative;
+      left: -30px;
+      transition: all 0.1s ease-in-out;
+      color: transparent;
   }
 
   #skill-list li:hover {
     color: orange;
+  }
+
+  #skill-list li:hover:before {
+    color: orange;
+    left: -5px;
+    transition: all 0.5s ease-in-out;
   }
 
   :global(path) {
