@@ -1,10 +1,10 @@
-#Heartwood Visualize
+# Heartwood Visualize
 
 ![Work-in-progress screenshot](screenshot.png)
 
 Heartwood is a data visualization component built with d3.js, Svelte, and some CSS transformation magic. WIP for new web presence.
 
-##Goal
+## Goal
 
 Visualize a skillset as a series of concentric rings set in semi-3D space.
 
@@ -12,7 +12,7 @@ Instead of a static radial graph or pie chart, Heartwood attempts to visualize t
 
 A "layer" of rings is a visualization for a single year. Prior years are visualized as further ring layers receding into 3d space.
 
-##Roadmap
+## Roadmap
 
 - add accelerometer support for mobile devices
 - add legend that displays each skill duration for years
