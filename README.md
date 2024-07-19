@@ -1,38 +1,21 @@
-# create-svelte
+#Heartwood Visualize
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+![Work-in-progress screenshot](screenshot.png)
 
-## Creating a project
+Heartwood is a data visualization component built with d3.js, Svelte, and some CSS transformation magic. WIP for new web presence.
 
-If you're seeing this, you've probably already done this step. Congrats!
+##Goal
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Visualize a skillset as a series of concentric rings set in semi-3D space.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+Instead of a static radial graph or pie chart, Heartwood attempts to visualize the growth of a skillset over time, much like tree rings. Each ring is a specific skill (i.e. Javascript/Typescript). The duration or "length" of a ring refers to the amount of time that skill was used (in months). Foundational skills are located in the center while more advanced skills make up outer rings.
 
-## Developing
+A "layer" of rings is a visualization for a single year. Prior years are visualized as further ring layers receding into 3d space.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+##Roadmap
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- add accelerometer support for mobile devices
+- add legend that displays each skill duration for years
+- support for multiple color schemes
+- dark/light mode
+- support for larger/deeper skillsets
